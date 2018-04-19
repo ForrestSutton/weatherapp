@@ -55,7 +55,9 @@
                   <p>
                     <span class="title">{{ weather.city }}</span>
                     <br>
-                    <span class="subtitle">{{ weather.temperature }}° F</span>
+                    <span class="title">{{ weather.time  }} </span>
+                    <br>
+                    <span class="subtitle">{{ weather.temperature|round|int }}° F</span>
                     <br> {{ weather.description }}
                   </p>
                 </div>
