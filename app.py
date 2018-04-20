@@ -1,7 +1,9 @@
 import requests
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
+import datetime
 import time
+import pytz
 
 
 app = Flask(__name__)
@@ -13,8 +15,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///weather.db'
 db = SQLAlchemy(app)
 
 class City(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
+    id     = db.Column(db.Integer, primary_key=True)
+    name   = db.Column(db.String(50), nullable=False)
+    zone   = db.Column(db.String(15), nullable=False)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -28,10 +31,15 @@ def index():
             db.session.commit()
 
     now = time.strftime('%l:%M %p %Z')
+    utcnow = datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
+    Edinburgh= utcnow.astimezone(pytz.timezone('Europe/London'))
+    east = utcnow.astimezone(pytz.timezone('US/Eastern'))
+    cent = utcnow.astimezone(pytz.timezone('US/Central'))
+    west = utcnow.astimezone(pytz.timezone('US/Pacific'))
 
     cities = City.query.all()
 
-    url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=<KEY>'
+    url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=676a43c222cae620312f96afa8979df9'
 
     weather_data = []
 
@@ -41,7 +49,7 @@ def index():
 
         weather = {
             'city' : city.name,
-            'time': now,
+            'time' :  city.zone,
             'temperature' : r['main']['temp'],
             'description' : r['weather'][0]['description'],
             'icon' : r['weather'][0]['icon'],
