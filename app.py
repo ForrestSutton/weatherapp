@@ -33,7 +33,7 @@ def index():
     now = time.strftime('%l:%M %p %Z')
     utcnow = datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
     Edinburgh= utcnow.astimezone(pytz.timezone('Europe/London'))
-    east = utcnow.astimezone(pytz.timezone('US/Eastern'))
+    east = 'US/Eastern'
     cent = utcnow.astimezone(pytz.timezone('US/Central'))
     west = utcnow.astimezone(pytz.timezone('US/Pacific'))
 
@@ -49,7 +49,7 @@ def index():
 
         weather = {
             'city' : city.name,
-            'time' :  city.zone,
+            'time' : now,
             'temperature' : r['main']['temp'],
             'description' : r['weather'][0]['description'],
             'icon' : r['weather'][0]['icon'],
