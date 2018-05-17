@@ -49,7 +49,7 @@ def index():
 
         weather = {
             'city' : city.name,
-            'time' : now,
+            'zone' : utcnow.astimezone(pytz.timezone(city.zone)).strftime('%l:%M %p %Z'),
             'temperature' : r['main']['temp'],
             'description' : r['weather'][0]['description'],
             'icon' : r['weather'][0]['icon'],
